@@ -9,6 +9,7 @@
 #include <ctime>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 
 char inputC[128] = "/путь/до";
 char inputW[128] = "/путь/до";
@@ -34,8 +35,50 @@ void drawGui(std::string text, char* path, ImGuiFileDialog &instance) {
         instance.Close();
     }
 }
+void startScript(int dur_s) {
+    std::ofstream dir_c("/home/yuichi/backup_app/config/dir_c.txt", std::ios::in | std::ios::trunc);
+    std::ofstream dir_w("/home/yuichi/backup_app/config/dir_w.txt", std::ios::in | std::ios::trunc);
+    std::ofstream dur("/home/yuichi/backup_app/config/dur.txt", std::ios::in | std::ios::trunc);
+    std::ofstream last("/home/yuichi/backup_app/config/last.txt", std::ios::in | std::ios::trunc);
+    dir_c << inputC;
+    dir_w << inputW;
+    dur << dur_s;
+    last << time(NULL);
+}
 
-int main() {
+void processScript() {
+    std::ifstream dur("/home/yuichi/backup_app/config/dur.txt", std::ios::out);
+    std::ifstream last("/home/yuichi/backup_app/config/last.txt", std::ios::out);
+    std::ifstream dir_c("/home/yuichi/backup_app/config/dir_c.txt", std::ios::out);
+    std::ifstream dir_w("/home/yuichi/backup_app/config/dir_w.txt", std::ios::out);
+    std::ifstream name("/home/yuichi/backup_app/config/name.txt", std::ios::out);
+   
+
+    std::string c, w, d, l, n;
+    
+    std::getline(dir_c, c);
+    std::getline(dir_w, w);
+    std::string cc = "-c " + c + " ";
+    std::string ww = "-w " + w + " ";
+
+    std::getline(dur, d);
+    std::getline(last, l);
+    
+    std::getline(name, n);
+    std::string nn = "-n " + n + " ";
+
+
+    while (true) {
+        if(stoi(d) + stoi(l) <= time(NULL)) {
+            system((std::string("./myscript.sh ") + cc + ww + nn).c_str());
+            exit(3);
+        }
+    }
+}
+int main(int argc, char *argv[]) {
+    if(argc > 1) {
+        processScript();
+    }
 
     sf::RenderWindow window(sf::VideoMode(700, 500), "ImGui + SFML = <3", sf::Style::Titlebar | sf::Style::Close);
     ImGui::SFML::Init(window, false);
@@ -83,17 +126,16 @@ int main() {
             ImGui::Text(u8"Сделать бекап через");
             
             static int e = 0;
-            ImGui::RadioButton("5 минут", &e, 1); ImGui::SameLine();
-            ImGui::RadioButton("1 час", &e, 2); ImGui::SameLine();
-            ImGui::RadioButton("1 неделя", &e, 3); ImGui::SameLine(); 
+            ImGui::RadioButton("5 минут", &e, 15); ImGui::SameLine();
+            ImGui::RadioButton("1 час", &e, 3600); ImGui::SameLine();
+            ImGui::RadioButton("1 неделя", &e, 604800); ImGui::SameLine(); 
             ImGui::RadioButton("Сейчас", &e, 0); 
             
             ImGui::SetCursorPos(ImVec2(600, 450));
             if (ImGui::Button("Готово")) {
-                if(e == 0) {
-                    system("./myscript.sh");
+                    startScript(e);
+                    processScript();
                 }
-            }
 
             ImGui::SetCursorPos(ImVec2(25, 450));
             if (ImGui::Button("Назад")) currentTab--;
@@ -102,7 +144,6 @@ int main() {
             ImGui::InputText("Имя копии", nameOfFile, IM_ARRAYSIZE(nameOfFile));
             
             std::ostringstream os;
-            os << "Имя будет отображено как: ";
             os << nameOfFile;
             std::time_t t = std::time(0);   // get time now
             std::tm* now = std::localtime(&t);
@@ -110,10 +151,14 @@ int main() {
          << (now->tm_mon + 1) << '-'
          <<  now->tm_mday
          << "\n";
-            ImGui::Text(os.str().c_str());
+            ImGui::Text((std::string("Имя будет отображено как: ") + os.str()).c_str());
             
             ImGui::SetCursorPos(ImVec2(600, 450));
-            if (ImGui::Button("Дальше")) currentTab++;
+            if (ImGui::Button("Дальше")) {
+                currentTab++;
+                std::ofstream name("/home/yuichi/backup_app/config/name.txt", std::ios::in | std::ios::trunc);
+                name << os.str();
+            }
 
             ImGui::SetCursorPos(ImVec2(25, 450));
             if (ImGui::Button("Назад")) currentTab--;

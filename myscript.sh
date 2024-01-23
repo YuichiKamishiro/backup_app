@@ -15,6 +15,6 @@ do
 
     esac
 done
-archive_file="$name.tgz"
+archive_file="$name.tar"
 # Backup the files using tar.
-tar czf $where/$name $copy
+tar czf $where/$archive_file $copy
