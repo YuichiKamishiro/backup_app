@@ -1,1 +1,1 @@
-/путь/до/
+/home/yuichi/backup_app/saves
