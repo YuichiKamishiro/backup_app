@@ -1,10 +1,4 @@
 #!/bin/bash
-####################################
-#
-# Backup to NFS mount script.
-#
-####################################
-    
 while getopts c:w:n: option
 do 
     case "${option}"

@@ -70,7 +70,7 @@ void startWithDur() {
             if(!last_re) {std::cout << "Error\n";}
             last_re << time(NULL);
             last_re.close();
-            std::cout << "Copy done\n";
+            system("notify-send Уведомление 'Копия была сделана'");
         }
     }
 }
