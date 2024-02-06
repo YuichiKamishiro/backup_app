@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-extern char inputRecovery[64] = "/путь/до/";
+static char inputRecovery[64] = "/путь/до/";
 
 // Отрисовка FileDialog
 void drawDirGui(std::string text, char* path, ImGuiFileDialog &instance) { 

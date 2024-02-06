@@ -37,7 +37,7 @@ void startNow() {
     std::cout << ww << std::endl;
     std::cout << nn << std::endl;
 
-    system((std::string("/usr/share/backup_app/script.sh ") + ww + nn).c_str());
+    system((std::string("/usr/share/backup_app/copy.sh ") + ww + nn).c_str());
     std::ofstream last_re("/usr/share/backup_app/config/last.txt", std::ios::in | std::ios::trunc);
     if(!last_re) {std::cout << "Error\n";}
     last_re << time(NULL);
@@ -65,12 +65,11 @@ void startWithDur() {
     // Настало ли время для бекапа
     while (true) {
         if(stoi(d) + stoi(l) <= time(NULL)) {
-            system((std::string("/usr/share/backup_app/script.sh ") + ww + nn).c_str());
+            system((std::string("/usr/share/backup_app/copy.sh ") + ww + nn).c_str());
             std::ofstream last_re("/usr/share/backup_app/config/last.txt", std::ios::in | std::ios::trunc);
             if(!last_re) {std::cout << "Error\n";}
             last_re << time(NULL);
             last_re.close();
-            system("notify-send Уведомление 'Копия была сделана'");
         }
     }
 }

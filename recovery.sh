@@ -6,4 +6,4 @@ do
         n)name=${OPTARG};;
     esac
 done
-tar --use-compress-program=unzstd -xvf $name.tar.zst 
+tar --use-compress-program=unzstd -xvf $name --directory=/

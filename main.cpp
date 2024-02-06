@@ -124,8 +124,9 @@ int main(int argc, char *argv[]) {
             ImGui::InputText("Копия для восстановления", inputRecovery, IM_ARRAYSIZE(inputRecovery));
             drawFileGui("Выбрать копию", instance_b);
             ImGui::SetCursorPos(ImVec2(750, 450));
+            std::string inputRecoveryStr = inputRecovery;
             if(ImGui::Button("Начать восстановление")) {
-                system("/usr/share/backup_app/recovery.sh -w ");
+                system((std::string("/usr/share/backup_app/recovery.sh -n ") + inputRecoveryStr).c_str());
             }
         }
 
