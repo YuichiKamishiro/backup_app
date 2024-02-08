@@ -34,14 +34,22 @@ void startNow() {
     std::getline(name, n);
     std::string nn = "-n " + n + " ";
 
-    std::cout << ww << std::endl;
-    std::cout << nn << std::endl;
+    std::cout << w  << "/" << n << ".tar.zst" << std::endl;
 
     system((std::string("/usr/share/backup_app/copy.sh ") + ww + nn).c_str());
     std::ofstream last_re("/usr/share/backup_app/config/last.txt", std::ios::in | std::ios::trunc);
     if(!last_re) {std::cout << "Error\n";}
     last_re << time(NULL);
     last_re.close();
+    std::ifstream file(w  + "/" + n + ".tar.zst",std::ios::binary | std::ios::ate);
+    if (!file) {
+        std::cout << "Ошибка открытия файла!" << std::endl;
+    }
+    std::streampos filesize = file.tellg();
+    file.close();
+    filesize = filesize / (1024.0 * 1024.0);
+    std::cout << "Размер файла " << " : " << filesize << " мбайт" << std::endl;
+
 }
 
 void startWithDur() {
@@ -70,6 +78,7 @@ void startWithDur() {
             if(!last_re) {std::cout << "Error\n";}
             last_re << time(NULL);
             last_re.close();
+            system("notify-send hello '123'");
         }
     }
 }
