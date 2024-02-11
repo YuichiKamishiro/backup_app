@@ -10,4 +10,4 @@ do
 done
 archive_file="$name.tar.zst"
 # Backup the files using tar.
-sudo tar czf $where/$name /etc
+sudo tar czf $where/$archive_file /etc

@@ -34,13 +34,12 @@ int main(int argc, char *argv[]) {
     if(argc > 1) {
         startWithDur();
     }
-
     // Создание окна
     sf::RenderWindow window(sf::VideoMode(900, 500), "ImGui + SFML = <3", sf::Style::Titlebar | sf::Style::Close);
     ImGui::SFML::Init(window, false);
     
     sf::Clock deltaClock;
-    ImGuiIO& io = ImGui::GetIO();
+    auto io = ImGui::GetIO();
      
     // Загрузка шрифта
     io.Fonts->Clear();
